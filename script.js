@@ -129,11 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.classList.add('from-right');
             }
         }
-        
-        // Sur PC : rendre visible immédiatement
-        if (!isMobile()) {
-            card.classList.add('visible');
-        }
     });
 
     // Observer les cartes d'agences
@@ -149,11 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 card.classList.add('from-right');
             }
-        }
-        
-        // Sur PC : rendre visible immédiatement
-        if (!isMobile()) {
-            card.classList.add('visible');
         }
     });
 
