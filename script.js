@@ -188,13 +188,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         observer.observe(item);
         item.style.transitionDelay = `${index * 0.1}s`;
-        
-        // Sur PC : rendre visible immédiatement
-        if (!isMobile()) {
-            setTimeout(() => {
-                item.classList.add('visible');
-            }, 50);
-        }
     });
 
     // ===== CARROUSEL D'AVIS MOBILE =====
