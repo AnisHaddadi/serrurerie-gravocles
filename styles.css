@@ -2173,11 +2173,14 @@ section {
 
     .service-card,
     .agence-card,
-    .avantage-item,
-    .avis-card {
+    .avantage-item {
         opacity: 1 !important;
         transform: none !important;
         transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    
+    .avis-card {
+        opacity: 1 !important;
     }
 
     .fade-in,

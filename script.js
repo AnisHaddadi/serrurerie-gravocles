@@ -132,9 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Sur PC : rendre visible immédiatement
         if (!isMobile()) {
-            setTimeout(() => {
-                card.classList.add('visible');
-            }, 50);
+            card.classList.add('visible');
         }
     });
 
@@ -155,9 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Sur PC : rendre visible immédiatement
         if (!isMobile()) {
-            setTimeout(() => {
-                card.classList.add('visible');
-            }, 50);
+            card.classList.add('visible');
         }
     });
 
