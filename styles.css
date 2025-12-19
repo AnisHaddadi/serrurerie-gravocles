@@ -1822,23 +1822,25 @@ section {
 @media (max-width: 968px) {
     .nav-menu {
         position: fixed;
-        left: -100%;
+        right: -100%;
         top: 70px;
         flex-direction: column;
         background: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(26, 26, 26, 0.98) 100%);
         backdrop-filter: blur(20px);
         width: 75%;
-        max-width: 280px;
+        max-width: 320px;
         text-align: left;
-        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.1);
-        padding: 1.5rem 0;
-        gap: 0.3rem;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: -4px 0 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.1);
+        padding: 2rem 0;
+        gap: 0.5rem;
         z-index: 999;
         max-height: calc(100vh - 70px);
         overflow-y: auto;
-        border-right: 2px solid var(--color-primary);
-        border-radius: 0 20px 20px 0;
+        border-left: 2px solid rgba(255, 215, 0, 0.2);
+        border-top: 2px solid rgba(255, 215, 0, 0.2);
+        border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+        border-radius: 20px 0 0 20px;
     }
 
     .nav-menu.active {
