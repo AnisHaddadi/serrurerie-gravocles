@@ -710,13 +710,11 @@ section {
     box-shadow: var(--shadow);
     transition: var(--transition);
     border: 2px solid transparent;
-    opacity: 0;
-    transform: translateY(30px);
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .service-card.visible {
-    opacity: 1;
-    transform: translateY(0);
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -921,13 +919,11 @@ section {
     box-shadow: var(--shadow);
     transition: var(--transition);
     border-left: 4px solid var(--color-primary);
-    opacity: 0;
-    transform: translateX(-30px);
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .agence-card.visible {
-    opacity: 1;
-    transform: translateX(0);
     animation: fadeInLeft 0.6s ease-out;
 }
 
@@ -1065,22 +1061,26 @@ section {
     border-radius: 12px;
     border-left: 4px solid var(--color-primary);
     transition: var(--transition);
-    opacity: 0;
+    opacity: 1;
     position: relative;
     overflow: hidden;
+    transform: translateX(0);
 }
 
 .avantage-item.from-left {
-    transform: translateX(-50px);
+    transform: translateX(0);
 }
 
 .avantage-item.from-right {
-    transform: translateX(50px);
+    transform: translateX(0);
 }
 
 .avantage-item.visible {
-    opacity: 1;
-    transform: translateX(0);
+    animation: fadeInLeft 0.6s ease-out;
+}
+
+.avantage-item.visible.from-right {
+    animation: fadeInRight 0.6s ease-out;
 }
 
 .avantage-item::before {
