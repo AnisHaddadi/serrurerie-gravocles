@@ -129,6 +129,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.classList.add('from-right');
             }
         }
+        
+        // Sur PC : rendre visible immédiatement
+        if (!isMobile()) {
+            setTimeout(() => {
+                card.classList.add('visible');
+            }, 50);
+        }
     });
 
     // Observer les cartes d'agences
@@ -144,6 +151,13 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 card.classList.add('from-right');
             }
+        }
+        
+        // Sur PC : rendre visible immédiatement
+        if (!isMobile()) {
+            setTimeout(() => {
+                card.classList.add('visible');
+            }, 50);
         }
     });
 
@@ -188,6 +202,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         observer.observe(item);
         item.style.transitionDelay = `${index * 0.1}s`;
+        
+        // Sur PC : rendre visible immédiatement
+        if (!isMobile()) {
+            setTimeout(() => {
+                item.classList.add('visible');
+            }, 50);
+        }
     });
 
     // ===== CARROUSEL D'AVIS MOBILE =====

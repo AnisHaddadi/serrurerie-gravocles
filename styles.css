@@ -2205,30 +2205,6 @@ section {
 
     /* Sur PC : les cartes doivent être visibles avec les animations d'origine */
 
-    /* Sur PC : rendre les cartes visibles par défaut */
-    @media (min-width: 769px) {
-        .service-card {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .agence-card {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .avantage-item {
-            opacity: 1;
-        }
-        
-        .avantage-item.from-left {
-            transform: translateX(0);
-        }
-        
-        .avantage-item.from-right {
-            transform: translateX(0);
-        }
-    }
 
     /* Optimisations pour mobile uniquement */
     @media (max-width: 768px) {
