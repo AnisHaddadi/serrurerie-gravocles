@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== ANIMATIONS AU SCROLL =====
     const observerOptions = {
-        threshold: 0.1,
+        threshold: 0.3,
         rootMargin: '0px 0px -50px 0px'
     };
 
@@ -89,17 +89,31 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                // Sur mobile : ajouter la lueur jaune automatique
+                if (window.innerWidth <= 768) {
+                    entry.target.classList.add('highlighted');
+                }
+            } else {
+                entry.target.classList.remove('visible');
+                // Retirer la lueur quand on sort du viewport
+                if (window.innerWidth <= 768) {
+                    entry.target.classList.remove('highlighted');
+                }
             }
         });
     }, observerOptions);
 
+    // Fonction pour détecter si on est sur mobile
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
     // Observer les cartes de services (fadeInUp sur desktop, alterné sur mobile)
     const serviceCards = document.querySelectorAll('.service-card');
-    const isMobileDevice = window.innerWidth <= 768;
     serviceCards.forEach((card, index) => {
         observer.observe(card);
         // Sur mobile : alterner gauche/droite
-        if (isMobileDevice) {
+        if (isMobile()) {
             if (index % 2 === 0) {
                 card.classList.add('from-left');
             } else {
@@ -113,13 +127,42 @@ document.addEventListener('DOMContentLoaded', function() {
     agenceCards.forEach((card, index) => {
         observer.observe(card);
         // Sur mobile : alterner gauche/droite
-        if (isMobileDevice) {
+        if (isMobile()) {
             if (index % 2 === 0) {
                 card.classList.add('from-left');
             } else {
                 card.classList.add('from-right');
             }
         }
+    });
+
+    // Réinitialiser les classes au redimensionnement
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const mobile = isMobile();
+            serviceCards.forEach((card, index) => {
+                card.classList.remove('from-left', 'from-right');
+                if (mobile) {
+                    if (index % 2 === 0) {
+                        card.classList.add('from-left');
+                    } else {
+                        card.classList.add('from-right');
+                    }
+                }
+            });
+            agenceCards.forEach((card, index) => {
+                card.classList.remove('from-left', 'from-right');
+                if (mobile) {
+                    if (index % 2 === 0) {
+                        card.classList.add('from-left');
+                    } else {
+                        card.classList.add('from-right');
+                    }
+                }
+            });
+        }, 250);
     });
 
     // Observer les avantages avec animation alternée (toujours alterné)
@@ -139,6 +182,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const sliderContainer = document.querySelector('.slider-container');
     let currentAvisIndex = 0;
     let avisInterval = null;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let isDragging = false;
 
     function initAvisCarousel() {
         // Détecter si on est sur mobile
@@ -148,6 +194,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (avisInterval) {
             clearInterval(avisInterval);
             avisInterval = null;
+        }
+
+        // Retirer les anciens event listeners
+        const newSliderContainer = document.querySelector('.slider-container');
+        if (newSliderContainer && newSliderContainer !== sliderContainer) {
+            // Cloner et remplacer pour retirer les listeners
         }
 
         if (isMobile && avisCards.length > 0 && sliderContainer) {
@@ -164,11 +216,26 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             function showNextAvis() {
+                if (isDragging) return; // Ne pas changer pendant le drag
+                
                 avisCards[currentAvisIndex].classList.remove('active');
                 avisCards[currentAvisIndex].classList.add('prev');
 
                 currentAvisIndex = (currentAvisIndex + 1) % avisCards.length;
+                updateAvisCards();
+            }
 
+            function showPrevAvis() {
+                if (isDragging) return;
+                
+                avisCards[currentAvisIndex].classList.remove('active');
+                avisCards[currentAvisIndex].classList.add('next');
+
+                currentAvisIndex = (currentAvisIndex - 1 + avisCards.length) % avisCards.length;
+                updateAvisCards();
+            }
+
+            function updateAvisCards() {
                 // Réinitialiser toutes les classes
                 avisCards.forEach((card, index) => {
                     card.classList.remove('active', 'prev', 'next');
@@ -183,6 +250,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 avisCards[nextIndex].classList.add('next');
             }
 
+            // Gestion du swipe tactile
+            sliderContainer.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                isDragging = true;
+                if (avisInterval) clearInterval(avisInterval);
+            }, { passive: true });
+
+            sliderContainer.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                touchEndX = e.touches[0].clientX;
+            }, { passive: true });
+
+            sliderContainer.addEventListener('touchend', () => {
+                if (!isDragging) return;
+                
+                const swipeDistance = touchStartX - touchEndX;
+                const minSwipeDistance = 50; // Distance minimale pour déclencher le swipe
+
+                if (Math.abs(swipeDistance) > minSwipeDistance) {
+                    if (swipeDistance > 0) {
+                        // Swipe vers la gauche = suivant
+                        showNextAvis();
+                    } else {
+                        // Swipe vers la droite = précédent
+                        showPrevAvis();
+                    }
+                }
+
+                isDragging = false;
+                startAvisCarousel();
+            }, { passive: true });
+
             // Démarrer le carrousel automatique (3.5 secondes)
             function startAvisCarousel() {
                 if (avisInterval) clearInterval(avisInterval);
@@ -195,7 +294,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             sliderContainer.addEventListener('mouseleave', () => {
-                startAvisCarousel();
+                if (!isDragging) {
+                    startAvisCarousel();
+                }
             });
 
             // Démarrer le carrousel
