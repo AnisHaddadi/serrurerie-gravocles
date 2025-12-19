@@ -244,6 +244,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.style.display = 'block';
                 }
             });
+        } else if (!isMobile && avisCards.length > 0) {
+            // Sur PC : rendre tous les avis visibles
+            avisCards.forEach((card) => {
+                card.classList.remove('active', 'prev', 'next');
+                card.style.opacity = '1';
+                card.style.transform = 'translateX(0) scale(1)';
+                card.style.position = 'relative';
+            });
+        }
 
             function showNextAvis() {
                 if (isDragging) return; // Ne pas changer pendant le drag
