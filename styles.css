@@ -2224,10 +2224,26 @@ section {
         }
 
         /* Sur mobile : commencer invisible pour l'animation */
-        .service-card:not(.visible),
-        .agence-card:not(.visible),
+        .service-card:not(.visible) {
+            opacity: 0 !important;
+            transform: translateY(30px) !important;
+        }
+        
+        .agence-card:not(.visible) {
+            opacity: 0 !important;
+            transform: translateX(-30px) !important;
+        }
+        
         .avantage-item:not(.visible) {
             opacity: 0 !important;
+        }
+        
+        .avantage-item:not(.visible).from-left {
+            transform: translateX(-50px) !important;
+        }
+        
+        .avantage-item:not(.visible).from-right {
+            transform: translateX(50px) !important;
         }
 
         .service-card.visible,
