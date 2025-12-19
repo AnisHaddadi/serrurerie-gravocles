@@ -93,34 +93,134 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
 
-    // Observer les cartes de services
+    // Observer les cartes de services (fadeInUp sur desktop, alterné sur mobile)
     const serviceCards = document.querySelectorAll('.service-card');
+    const isMobileDevice = window.innerWidth <= 768;
     serviceCards.forEach((card, index) => {
         observer.observe(card);
-        card.style.transitionDelay = `${index * 0.1}s`;
+        // Sur mobile : alterner gauche/droite
+        if (isMobileDevice) {
+            if (index % 2 === 0) {
+                card.classList.add('from-left');
+            } else {
+                card.classList.add('from-right');
+            }
+        }
     });
 
-    // Observer les cartes d'agences
+    // Observer les cartes d'agences (fadeInLeft sur desktop, alterné sur mobile)
     const agenceCards = document.querySelectorAll('.agence-card');
     agenceCards.forEach((card, index) => {
         observer.observe(card);
-        card.style.transitionDelay = `${index * 0.1}s`;
+        // Sur mobile : alterner gauche/droite
+        if (isMobileDevice) {
+            if (index % 2 === 0) {
+                card.classList.add('from-left');
+            } else {
+                card.classList.add('from-right');
+            }
+        }
     });
 
-    // Observer les avantages
+    // Observer les avantages avec animation alternée (toujours alterné)
     const avantageItems = document.querySelectorAll('.avantage-item');
     avantageItems.forEach((item, index) => {
         observer.observe(item);
-        item.style.transitionDelay = `${index * 0.1}s`;
+        // Alterner gauche/droite : pair = gauche, impair = droite (toujours)
+        if (index % 2 === 0) {
+            item.classList.add('from-left');
+        } else {
+            item.classList.add('from-right');
+        }
     });
 
-    // ===== CARROUSEL D'AVIS HORIZONTAL =====
-    // Le carrousel utilise maintenant scroll-snap natif CSS, pas besoin de JavaScript
-    // Animation au scroll pour les cartes d'avis
+    // ===== CARROUSEL D'AVIS MOBILE =====
     const avisCards = document.querySelectorAll('.avis-card');
-    avisCards.forEach((card, index) => {
-        observer.observe(card);
-        card.style.transitionDelay = `${index * 0.1}s`;
+    const sliderContainer = document.querySelector('.slider-container');
+    let currentAvisIndex = 0;
+    let avisInterval = null;
+
+    function initAvisCarousel() {
+        // Détecter si on est sur mobile
+        const isMobile = window.innerWidth <= 768;
+
+        // Nettoyer l'interval précédent
+        if (avisInterval) {
+            clearInterval(avisInterval);
+            avisInterval = null;
+        }
+
+        if (isMobile && avisCards.length > 0 && sliderContainer) {
+            // Initialiser le carrousel mobile
+            avisCards.forEach((card, index) => {
+                card.classList.remove('active', 'prev', 'next');
+                if (index === 0) {
+                    card.classList.add('active');
+                } else if (index === 1) {
+                    card.classList.add('next');
+                } else {
+                    card.style.display = 'block';
+                }
+            });
+
+            function showNextAvis() {
+                avisCards[currentAvisIndex].classList.remove('active');
+                avisCards[currentAvisIndex].classList.add('prev');
+
+                currentAvisIndex = (currentAvisIndex + 1) % avisCards.length;
+
+                // Réinitialiser toutes les classes
+                avisCards.forEach((card, index) => {
+                    card.classList.remove('active', 'prev', 'next');
+                });
+
+                avisCards[currentAvisIndex].classList.add('active');
+
+                const prevIndex = (currentAvisIndex - 1 + avisCards.length) % avisCards.length;
+                const nextIndex = (currentAvisIndex + 1) % avisCards.length;
+
+                avisCards[prevIndex].classList.add('prev');
+                avisCards[nextIndex].classList.add('next');
+            }
+
+            // Démarrer le carrousel automatique (3.5 secondes)
+            function startAvisCarousel() {
+                if (avisInterval) clearInterval(avisInterval);
+                avisInterval = setInterval(showNextAvis, 3500);
+            }
+
+            // Pause au survol/touch
+            sliderContainer.addEventListener('mouseenter', () => {
+                if (avisInterval) clearInterval(avisInterval);
+            });
+
+            sliderContainer.addEventListener('mouseleave', () => {
+                startAvisCarousel();
+            });
+
+            // Démarrer le carrousel
+            startAvisCarousel();
+        } else {
+            // Desktop : scroll horizontal normal
+            avisCards.forEach((card, index) => {
+                card.classList.remove('active', 'prev', 'next');
+                card.style.position = '';
+                card.style.opacity = '';
+                card.style.transform = '';
+                observer.observe(card);
+                card.style.transitionDelay = `${index * 0.1}s`;
+            });
+        }
+    }
+
+    // Initialiser au chargement
+    initAvisCarousel();
+
+    // Réinitialiser au redimensionnement
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(initAvisCarousel, 250);
     });
 
     // ===== MODULE ÉTOILES INTERACTIF =====
