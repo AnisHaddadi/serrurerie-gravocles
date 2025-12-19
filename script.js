@@ -115,14 +115,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return window.innerWidth <= 768;
     }
 
-    // Observer les cartes de services (fadeInUp sur desktop, alterné sur mobile)
+    // Observer les cartes de services
     const serviceCards = document.querySelectorAll('.service-card');
     serviceCards.forEach((card, index) => {
-        // Sur PC : rendre visible immédiatement
-        if (!isMobile()) {
-            card.classList.add('visible');
-        }
-        
         observer.observe(card);
         card.style.transitionDelay = `${index * 0.1}s`;
         
@@ -136,14 +131,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Observer les cartes d'agences (fadeInLeft sur desktop, alterné sur mobile)
+    // Observer les cartes d'agences
     const agenceCards = document.querySelectorAll('.agence-card');
     agenceCards.forEach((card, index) => {
-        // Sur PC : rendre visible immédiatement
-        if (!isMobile()) {
-            card.classList.add('visible');
-        }
-        
         observer.observe(card);
         card.style.transitionDelay = `${index * 0.1}s`;
         
@@ -171,11 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         card.classList.add('from-right');
                     }
-                } else {
-                    // Sur PC : s'assurer que la carte est visible
-                    if (!card.classList.contains('visible')) {
-                        card.classList.add('visible');
-                    }
                 }
             });
             agenceCards.forEach((card, index) => {
@@ -185,19 +170,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         card.classList.add('from-left');
                     } else {
                         card.classList.add('from-right');
-                    }
-                } else {
-                    // Sur PC : s'assurer que la carte est visible
-                    if (!card.classList.contains('visible')) {
-                        card.classList.add('visible');
-                    }
-                }
-            });
-            avantageItems.forEach((item, index) => {
-                if (!mobile) {
-                    // Sur PC : s'assurer que l'item est visible
-                    if (!item.classList.contains('visible')) {
-                        item.classList.add('visible');
                     }
                 }
             });
@@ -212,11 +184,6 @@ document.addEventListener('DOMContentLoaded', function() {
             item.classList.add('from-left');
         } else {
             item.classList.add('from-right');
-        }
-        
-        // Sur PC : rendre visible immédiatement
-        if (!isMobile()) {
-            item.classList.add('visible');
         }
         
         observer.observe(item);
