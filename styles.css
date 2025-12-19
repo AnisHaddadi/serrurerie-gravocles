@@ -1078,6 +1078,11 @@ section {
     transform: translateX(50px);
 }
 
+.avantage-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 .avantage-item::before {
     content: '';
     position: absolute;
@@ -1087,11 +1092,6 @@ section {
     height: 100%;
     background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), transparent);
     transition: width 0.5s ease;
-}
-
-.avantage-item.visible {
-    opacity: 1;
-    transform: translateX(0);
 }
 
 .avantage-item.visible.from-left {
@@ -2203,42 +2203,80 @@ section {
         padding: 2.5rem 0;
     }
 
-    /* Animations alternées gauche/droite pour mobile - toutes les sections */
-    .service-card,
-    .agence-card,
-    .avantage-item {
-        opacity: 0 !important;
-        transform: translateZ(0) !important;
-        -webkit-transform: translateZ(0) !important;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                    border-color 0.3s ease !important;
-        will-change: transform, opacity;
+    /* Sur PC : les cartes doivent être visibles avec les animations d'origine */
+    @media (min-width: 769px) {
+        .service-card.visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            animation: fadeInUp 0.6s ease-out !important;
+        }
+        
+        .agence-card.visible {
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+            animation: fadeInLeft 0.6s ease-out !important;
+        }
+        
+        .avantage-item.visible.from-left {
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+            animation: fadeInLeft 0.6s ease-out !important;
+        }
+        
+        .avantage-item.visible.from-right {
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+            animation: fadeInRight 0.6s ease-out !important;
+        }
     }
 
-    .service-card.visible,
-    .agence-card.visible,
-    .avantage-item.visible {
-        opacity: 1 !important;
+    /* Optimisations pour mobile uniquement */
+    @media (max-width: 768px) {
+        .service-card,
+        .agence-card,
+        .avantage-item {
+            transform: translateZ(0) !important;
+            -webkit-transform: translateZ(0) !important;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        border-color 0.3s ease,
+                        opacity 0.3s ease !important;
+            will-change: transform, opacity;
+        }
+
+        /* Sur mobile : commencer invisible pour l'animation */
+        .service-card:not(.visible),
+        .agence-card:not(.visible),
+        .avantage-item:not(.visible) {
+            opacity: 0 !important;
+        }
+
+        .service-card.visible,
+        .agence-card.visible,
+        .avantage-item.visible {
+            opacity: 1 !important;
+        }
     }
 
     /* Sur mobile : animations alternées pour toutes les sections */
-    .service-card.visible.from-left,
-    .agence-card.visible.from-left,
-    .avantage-item.visible.from-left {
-        animation: fadeInLeftMobile 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
-    }
+    @media (max-width: 768px) {
+        .service-card.visible.from-left,
+        .agence-card.visible.from-left,
+        .avantage-item.visible.from-left {
+            animation: fadeInLeftMobile 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        }
 
-    .service-card.visible.from-right,
-    .agence-card.visible.from-right,
-    .avantage-item.visible.from-right {
-        animation: fadeInRightMobile 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
-    }
+        .service-card.visible.from-right,
+        .agence-card.visible.from-right,
+        .avantage-item.visible.from-right {
+            animation: fadeInRightMobile 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        }
 
-    /* Si pas de classe from-left/from-right, utiliser fadeInUp par défaut */
-    .service-card.visible:not(.from-left):not(.from-right),
-    .agence-card.visible:not(.from-left):not(.from-right) {
-        animation: fadeInUpMobile 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        /* Si pas de classe from-left/from-right, utiliser fadeInUp par défaut */
+        .service-card.visible:not(.from-left):not(.from-right),
+        .agence-card.visible:not(.from-left):not(.from-right) {
+            animation: fadeInUpMobile 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        }
     }
 
     .service-card:nth-child(1),

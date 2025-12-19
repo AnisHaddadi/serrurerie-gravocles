@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (hamburger && navMenu) {
         hamburger.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
@@ -14,7 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Fermer le menu si on clique en dehors
         document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+            if (hamburger && navMenu && 
+                !hamburger.contains(e.target) && 
+                !navMenu.contains(e.target) &&
+                navMenu.classList.contains('active')) {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
             }
@@ -22,12 +26,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fermer le menu mobile au clic sur un lien
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+    if (navLinks.length > 0 && hamburger && navMenu) {
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (hamburger && navMenu) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
         });
-    });
+    }
 
     // Smooth scroll pour les liens d'ancrage
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -81,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== ANIMATIONS AU SCROLL =====
     const observerOptions = {
-        threshold: 0.3,
+        threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
 
@@ -94,8 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     entry.target.classList.add('highlighted');
                 }
             } else {
-                entry.target.classList.remove('visible');
-                // Retirer la lueur quand on sort du viewport
+                // Retirer seulement la lueur quand on sort du viewport sur mobile
                 if (window.innerWidth <= 768) {
                     entry.target.classList.remove('highlighted');
                 }
@@ -112,6 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const serviceCards = document.querySelectorAll('.service-card');
     serviceCards.forEach((card, index) => {
         observer.observe(card);
+        card.style.transitionDelay = `${index * 0.1}s`;
+        
         // Sur mobile : alterner gauche/droite
         if (isMobile()) {
             if (index % 2 === 0) {
@@ -120,12 +129,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.classList.add('from-right');
             }
         }
+        
+        // Forcer la visibilité si la carte est déjà dans le viewport
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            setTimeout(() => card.classList.add('visible'), 100);
+        }
     });
 
     // Observer les cartes d'agences (fadeInLeft sur desktop, alterné sur mobile)
     const agenceCards = document.querySelectorAll('.agence-card');
     agenceCards.forEach((card, index) => {
         observer.observe(card);
+        card.style.transitionDelay = `${index * 0.1}s`;
+        
         // Sur mobile : alterner gauche/droite
         if (isMobile()) {
             if (index % 2 === 0) {
@@ -133,6 +150,12 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 card.classList.add('from-right');
             }
+        }
+        
+        // Forcer la visibilité si la carte est déjà dans le viewport
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            setTimeout(() => card.classList.add('visible'), 100);
         }
     });
 
@@ -169,11 +192,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const avantageItems = document.querySelectorAll('.avantage-item');
     avantageItems.forEach((item, index) => {
         observer.observe(item);
+        item.style.transitionDelay = `${index * 0.1}s`;
+        
         // Alterner gauche/droite : pair = gauche, impair = droite (toujours)
         if (index % 2 === 0) {
             item.classList.add('from-left');
         } else {
             item.classList.add('from-right');
+        }
+        
+        // Forcer la visibilité si l'item est déjà dans le viewport
+        const rect = item.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            setTimeout(() => item.classList.add('visible'), 100);
         }
     });
 
