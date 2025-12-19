@@ -118,6 +118,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Observer les cartes de services (fadeInUp sur desktop, alterné sur mobile)
     const serviceCards = document.querySelectorAll('.service-card');
     serviceCards.forEach((card, index) => {
+        // Sur PC : rendre visible immédiatement
+        if (!isMobile()) {
+            card.classList.add('visible');
+        }
+        
         observer.observe(card);
         card.style.transitionDelay = `${index * 0.1}s`;
         
@@ -128,18 +133,17 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 card.classList.add('from-right');
             }
-        }
-        
-        // Forcer la visibilité si la carte est déjà dans le viewport
-        const rect = card.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-            setTimeout(() => card.classList.add('visible'), 100);
         }
     });
 
     // Observer les cartes d'agences (fadeInLeft sur desktop, alterné sur mobile)
     const agenceCards = document.querySelectorAll('.agence-card');
     agenceCards.forEach((card, index) => {
+        // Sur PC : rendre visible immédiatement
+        if (!isMobile()) {
+            card.classList.add('visible');
+        }
+        
         observer.observe(card);
         card.style.transitionDelay = `${index * 0.1}s`;
         
@@ -150,12 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 card.classList.add('from-right');
             }
-        }
-        
-        // Forcer la visibilité si la carte est déjà dans le viewport
-        const rect = card.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-            setTimeout(() => card.classList.add('visible'), 100);
         }
     });
 
@@ -173,6 +171,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         card.classList.add('from-right');
                     }
+                } else {
+                    // Sur PC : s'assurer que la carte est visible
+                    if (!card.classList.contains('visible')) {
+                        card.classList.add('visible');
+                    }
                 }
             });
             agenceCards.forEach((card, index) => {
@@ -183,6 +186,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         card.classList.add('from-right');
                     }
+                } else {
+                    // Sur PC : s'assurer que la carte est visible
+                    if (!card.classList.contains('visible')) {
+                        card.classList.add('visible');
+                    }
+                }
+            });
+            avantageItems.forEach((item, index) => {
+                if (!mobile) {
+                    // Sur PC : s'assurer que l'item est visible
+                    if (!item.classList.contains('visible')) {
+                        item.classList.add('visible');
+                    }
                 }
             });
         }, 250);
@@ -191,9 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Observer les avantages avec animation alternée (toujours alterné)
     const avantageItems = document.querySelectorAll('.avantage-item');
     avantageItems.forEach((item, index) => {
-        observer.observe(item);
-        item.style.transitionDelay = `${index * 0.1}s`;
-        
         // Alterner gauche/droite : pair = gauche, impair = droite (toujours)
         if (index % 2 === 0) {
             item.classList.add('from-left');
@@ -201,11 +214,13 @@ document.addEventListener('DOMContentLoaded', function() {
             item.classList.add('from-right');
         }
         
-        // Forcer la visibilité si l'item est déjà dans le viewport
-        const rect = item.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-            setTimeout(() => item.classList.add('visible'), 100);
+        // Sur PC : rendre visible immédiatement
+        if (!isMobile()) {
+            item.classList.add('visible');
         }
+        
+        observer.observe(item);
+        item.style.transitionDelay = `${index * 0.1}s`;
     });
 
     // ===== CARROUSEL D'AVIS MOBILE =====

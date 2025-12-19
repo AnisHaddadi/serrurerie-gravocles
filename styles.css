@@ -2204,28 +2204,43 @@ section {
     }
 
     /* Sur PC : les cartes doivent être visibles avec les animations d'origine */
+    /* Sur PC : rendre les cartes visibles par défaut */
     @media (min-width: 769px) {
-        .service-card.visible {
+        .service-card {
             opacity: 1 !important;
             transform: translateY(0) !important;
+        }
+        
+        .service-card.visible {
             animation: fadeInUp 0.6s ease-out !important;
         }
         
-        .agence-card.visible {
+        .agence-card {
             opacity: 1 !important;
             transform: translateX(0) !important;
+        }
+        
+        .agence-card.visible {
             animation: fadeInLeft 0.6s ease-out !important;
         }
         
-        .avantage-item.visible.from-left {
+        .avantage-item {
             opacity: 1 !important;
+        }
+        
+        .avantage-item.from-left {
             transform: translateX(0) !important;
+        }
+        
+        .avantage-item.from-right {
+            transform: translateX(0) !important;
+        }
+        
+        .avantage-item.visible.from-left {
             animation: fadeInLeft 0.6s ease-out !important;
         }
         
         .avantage-item.visible.from-right {
-            opacity: 1 !important;
-            transform: translateX(0) !important;
             animation: fadeInRight 0.6s ease-out !important;
         }
     }
