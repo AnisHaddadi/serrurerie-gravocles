@@ -1,0 +1,14 @@
+# Vercel
+.vercel
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+
+# PDFs (optionnel - vous pouvez les garder si nécessaire)
+*.pdf

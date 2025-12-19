@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Avis clients - Serrurerie Gravoclés. Découvrez les témoignages de nos clients et laissez votre avis.">
+    <title>Avis Clients - Serrurerie Gravoclés</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== PAGE AVIS STYLES ===== */
+        .avis-page {
+            padding-top: 100px;
+            min-height: 100vh;
+            background: var(--color-white);
+        }
+
+        .avis-intro {
+            text-align: center;
+            padding: 4rem 2rem 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .avis-intro h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .avis-intro p {
+            font-size: 1.1rem;
+            color: var(--color-gray);
+            line-height: 1.8;
+        }
+
+        /* ===== CARROUSEL D'AVIS ===== */
+        .temoignages-slider {
+            width: 100%;
+            margin: 50px 0;
+            padding: 2rem 0;
+        }
+
+        .temoignages-slider h2 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .slider-container {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px;
+            padding-bottom: 40px;
+            scroll-behavior: smooth;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .slider-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .slider-container::-webkit-scrollbar-track {
+            background: var(--color-gray-light);
+            border-radius: 10px;
+        }
+
+        .slider-container::-webkit-scrollbar-thumb {
+            background: var(--color-primary);
+            border-radius: 10px;
+        }
+
+        .slider-container::-webkit-scrollbar-thumb:hover {
+            background: var(--color-primary-dark);
+        }
+
+        .avis-card {
+            flex: 0 0 320px;
+            background: var(--color-white);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            scroll-snap-align: start;
+            transition: var(--transition);
+        }
+
+        .avis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .avis-card .note {
+            font-size: 1.4rem;
+            margin: 0 0 12px;
+            color: var(--color-primary);
+            letter-spacing: 2px;
+        }
+
+        .avis-card .texte {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            color: var(--color-gray-dark);
+            font-style: italic;
+        }
+
+        .avis-card .auteur {
+            font-size: 0.85rem;
+            color: var(--color-gray);
+            font-weight: 500;
+        }
+
+        /* ===== MODULE ÉTOILES ===== */
+        .module-etoiles {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 3rem 2rem;
+            background: var(--color-gray-light);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .module-etoiles h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .module-etoiles > p {
+            font-size: 1rem;
+            color: var(--color-gray);
+            margin-bottom: 2rem;
+        }
+
+        .stars {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .star {
+            font-size: 2.2rem;
+            background: none;
+            border: none;
+            color: rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .star.active,
+        .star:hover {
+            color: var(--color-primary);
+            transform: scale(1.1);
+        }
+
+        #send-rating {
+            background: var(--color-primary);
+            color: var(--color-secondary);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        #send-rating:hover:not(:disabled) {
+            background: var(--color-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        #send-rating:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .module-etoiles small {
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--color-gray);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .avis-intro h1 {
+                font-size: 2rem;
+            }
+
+            .temoignages-slider h2 {
+                font-size: 1.5rem;
+            }
+
+            .avis-card {
+                flex: 0 0 280px;
+                padding: 22px;
+            }
+
+            .slider-container {
+                padding: 15px;
+            }
+
+            .module-etoiles {
+                padding: 2rem 1.5rem;
+            }
+
+            .star {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Fixe -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>Gravoclés</h2>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#accueil" class="nav-link">Accueil</a></li>
+                <li><a href="index.html#services" class="nav-link">Services</a></li>
+                <li><a href="index.html#agences" class="nav-link">Agences</a></li>
+                <li><a href="index.html#avantages" class="nav-link">Avantages</a></li>
+                <li><a href="avis.html" class="nav-link active">Avis</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-phone">
+                <a href="tel:0143733596" class="btn btn-primary phone-btn nav-phone-btn">
+                    <span>01 43 73 35 96</span>
+                </a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Avis -->
+    <div class="avis-page">
+        <!-- Section Introduction -->
+        <section class="avis-intro">
+            <h1>Avis Clients</h1>
+            <p>Découvrez les témoignages de nos clients satisfaits. Votre avis compte pour nous et pour les autres clients. Partagez votre expérience avec Gravoclés.</p>
+        </section>
+
+        <!-- Section Carrousel d'Avis -->
+        <section class="temoignages-slider">
+            <h2>Ce que disent nos clients</h2>
+            <div class="slider-container">
+                <article class="avis-card slide">
+                    <p class="note">★★★★★</p>
+                    <p class="texte">"Intervention ultra-rapide ! J'ai été bloqué dehors un dimanche soir, et l'artisan est arrivé en 25 minutes. Service professionnel et prix correct. Je recommande vivement !"</p>
+                    <span class="auteur">- Marc D., Paris 11 · Avis Google</span>
+                </article>
+                <article class="avis-card slide">
+                    <p class="note">★★★★★</p>
+                    <p class="texte">"Excellent service pour le changement de ma serrure. L'artisan a été ponctuel, professionnel et très propre dans son travail. Porte blindée installée parfaitement."</p>
+                    <span class="auteur">- Sophie L., Paris 3 · Avis Google</span>
+                </article>
+                <article class="avis-card slide">
+                    <p class="note">★★★★★</p>
+                    <p class="texte">"Gravoclés m'a dépanné en urgence à 2h du matin. Service disponible 24/7 comme promis, intervention rapide et efficace. Merci beaucoup !"</p>
+                    <span class="auteur">- Thomas M., Paris 12 · Avis Google</span>
+                </article>
+                <article class="avis-card slide">
+                    <p class="note">★★★★★</p>
+                    <p class="texte">"Entreprise sérieuse avec des prix compétitifs. J'ai fait reproduire plusieurs clés et le service était impeccable. Je reviendrai sans hésiter."</p>
+                    <span class="auteur">- Julie R., Paris 11 · Avis Google</span>
+                </article>
+                <article class="avis-card slide">
+                    <p class="note">★★★★★</p>
+                    <p class="texte">"Très satisfait du service ! Intervention rapide, artisan compétent et tarifs raisonnables. Je n'hésiterai pas à faire appel à eux à nouveau."</p>
+                    <span class="auteur">- Pierre M., Paris 3 · Avis Google</span>
+                </article>
+            </div>
+        </section>
+
+        <!-- Module Interactif Étoiles -->
+        <section class="module-etoiles">
+            <h3>Laissez votre note</h3>
+            <p>Choisissez une note et continuez.</p>
+
+            <div class="stars" role="radiogroup" aria-label="Notez notre service">
+                <button class="star" data-value="1" aria-label="1 étoile">★</button>
+                <button class="star" data-value="2" aria-label="2 étoiles">★</button>
+                <button class="star" data-value="3" aria-label="3 étoiles">★</button>
+                <button class="star" data-value="4" aria-label="4 étoiles">★</button>
+                <button class="star" data-value="5" aria-label="5 étoiles">★</button>
+            </div>
+
+            <button id="send-rating" disabled>Continuer</button>
+
+            <small>
+                1–3 ★ → Redirection vers un formulaire interne ou Google Forms<br>
+                4–5 ★ → Redirection vers la fiche Google Reviews
+            </small>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-brand">
+                    <h3 class="footer-logo">Gravoclés</h3>
+                    <p class="footer-tagline">Artisan serrurier à Paris depuis 1977</p>
+                    <p class="footer-description">Intervention rapide 24h/24 et 7j/7 dans tout Paris et sa périphérie. Plus de 45 ans d'expérience au service de votre sécurité.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Nos Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#services">Ouverture de portes</a></li>
+                        <li><a href="index.html#services">Changement de serrure</a></li>
+                        <li><a href="index.html#services">Reproduction de clés</a></li>
+                        <li><a href="index.html#services">Portes blindées</a></li>
+                        <li><a href="index.html#services">Installation de serrures</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="tel:0143733596" class="footer-phone">01 43 73 35 96</a></li>
+                        <li><a href="tel:0660863596" class="footer-phone">06 60 86 35 96</a></li>
+                        <li><a href="mailto:gravocles@free.fr" class="footer-email">gravocles@free.fr</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Nos Agences</h4>
+                    <ul class="footer-links">
+                        <li>Paris 3 - 8 rue des Filles du Calvaire</li>
+                        <li>Paris 11 Charonne - 159 bd Voltaire</li>
+                        <li>Paris 11 Boulets - 193 bd Voltaire</li>
+                        <li>Paris 12</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Serrurerie Gravoclés. Tous droits réservés. | <a href="index.html#contact">Contact</a> | <a href="avis.html">Avis clients</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // ===== MODULE ÉTOILES INTERACTIF =====
+        const stars = document.querySelectorAll(".star");
+        const sendButton = document.getElementById("send-rating");
+        let selectedRating = 0;
+
+        // Liens de redirection
+        const lienFormulaireMauvaiseNote = "https://docs.google.com/forms/d/e/1FAIpQLSc7MLSAuvdlXIsboLUaIHPkt4OJ6r7wlDVoUcYp6HTWdlrb8A/viewform?usp=header";
+        const lienGoogleReview = "https://www.google.fr/maps/search/serrurier+paris+gravocl%C3%A9s/@48.8542406,2.3851334,18z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D";
+
+        function updateStars(value) {
+            stars.forEach(star => {
+                const v = parseInt(star.dataset.value);
+                star.classList.toggle("active", v <= value);
+            });
+            sendButton.disabled = value === 0;
+            selectedRating = value;
+        }
+
+        stars.forEach(star => {
+            star.addEventListener("click", () => {
+                const value = parseInt(star.dataset.value);
+                updateStars(value);
+            });
+
+            star.addEventListener("mouseenter", () => {
+                if (!selectedRating) {
+                    const value = parseInt(star.dataset.value);
+                    updateStars(value);
+                }
+            });
+        });
+
+        // Réinitialiser au survol si aucune note n'est sélectionnée
+        document.querySelector(".stars").addEventListener("mouseleave", () => {
+            if (selectedRating === 0) {
+                stars.forEach(star => star.classList.remove("active"));
+            } else {
+                updateStars(selectedRating);
+            }
+        });
+
+        sendButton.addEventListener("click", () => {
+            if (!selectedRating) return;
+
+            const target = selectedRating <= 3 ? lienFormulaireMauvaiseNote : lienGoogleReview;
+            window.open(target, "_blank");
+        });
+    </script>
+</body>
+</html>
+
